@@ -28,14 +28,6 @@
                 placeholder="Email" required/>
             </div>
           </div>
-          <div class="mb-6">
-            <!-- <div class="relative flex items-center gap-2">
-              <font-awesome-icon :icon="['fas', 'lock']" style="color: #eeeeec;" />
-              <input type="password" id="password" v-model="password"
-                class="border rounded px-3 py-2 w-full focus:border-secondary focus:outline-none focus:shadow-[0px_1px_0_0_#004E71]"
-                placeholder="Password" />
-            </div> -->
-          </div>
           <div class="flex justify-center mb-4">
             <button v-if="!record" @click="startRecording" class="bg-green-500 text-white px-4 py-2 rounded mr-2">
               Start Recording
@@ -75,7 +67,6 @@ const recording = ref(false);
 const record = ref(false);
 const recordingTime = ref(0);
 const username = ref('')
-const password = ref('')
 const email = ref('')
 const registerAudioURL = ref(localStorage.getItem('registerAudioURL') || '');
 let mediaRecorder;
@@ -140,7 +131,6 @@ const register = async () => {
   console.log(chunks)
   const formData = new FormData();
   formData.append('username', username.value);
-  formData.append('password', password.value);
   formData.append('email', email.value);
   formData.append('audio', audioFile);
 

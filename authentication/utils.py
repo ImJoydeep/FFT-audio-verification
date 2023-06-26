@@ -3,7 +3,7 @@ from scipy.fft import fft
 from django.http import HttpResponse
 from django.http import JsonResponse
 import base64
-
+import ast
 
 
 
@@ -17,13 +17,21 @@ def calculate_fft(audio_data):
 def matching_algorithm(fft_features1, fft_features2):
     # Implement your matching algorithm here
     # This is a simple example that calculates the cosine similarity between the two feature arrays
+    fft_features1 = np.array(fft_features1, dtype=np.float64)
+    fft_features2 = np.array(ast.literal_eval(fft_features2), dtype=np.float64)
+
+    # Ensure the arrays have the same length or compatible shapes
+    if fft_features1.shape[0] != fft_features2.shape[0]:
+        min_length = min(fft_features1.shape[0], fft_features2.shape[0])
+        fft_features1 = fft_features1[:min_length]
+        fft_features2 = fft_features2[:min_length]
 
     # Calculate the cosine similarity
     dot_product = np.dot(fft_features1, fft_features2)
     norm_product = np.linalg.norm(fft_features1) * np.linalg.norm(fft_features2)
     similarity = dot_product / norm_product
 
-    if similarity >= 0.5:
+    if similarity >= 0.6:
         return similarity
     else:
         return 0.0

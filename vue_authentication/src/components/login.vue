@@ -15,7 +15,7 @@
                     <div class="mb-6">
                         <div class="relative flex items-center gap-2">
                             <font-awesome-icon :icon="['fas', 'envelope']" style="color: #eeeeec;" />
-                            <input type="email" id="email"
+                            <input type="email" id="email" v-model="email"
                                 class="border rounded px-3 py-2 w-full focus:border-secondary focus:outline-none focus:shadow-[0px_1px_0_0_#004E71]"
                                 placeholder="Email" required/>
                         </div>
@@ -59,10 +59,8 @@ const recording = ref(false);
 const record = ref(false);
 const recordingTime = ref(0);
 const username = ref('')
-const password = ref('')
 const email = ref('')
 const loginAudioURL = ref(localStorage.getItem('loginAudioURL') || '');
-const registerAudioURL = ref(localStorage.getItem('registerAudioURL') || '');
 
 let mediaRecorder;
 let chunks = [];
@@ -82,7 +80,7 @@ const startRecording = () => {
             });
 
             mediaRecorder.addEventListener('stop', () => {
-                const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+                const blob = new Blob(chunks, { type: 'audio/wav; codecs=opus' });
                 const audioURL = URL.createObjectURL(blob);
                 loginAudioURL.value = audioURL;
                 localStorage.setItem('loginAudioURL', audioURL);
@@ -121,9 +119,8 @@ const deleteAudio = (tab) => {
 
 const login = async () => {
     const audioBlob = chunks[0]; // Assuming you are recording a single audio chunk
-    const audioFile = new File([audioBlob], `audio_${username}.wav`, { type: 'audio/wav' });
+    const audioFile = new File([audioBlob], `audio.wav`, { type: 'audio/wav' });
     const formData = new FormData();
-    formData.append('password', password.value);
     formData.append('email', email.value);
     formData.append('audio', audioFile);
     try {
@@ -133,6 +130,7 @@ const login = async () => {
             },
         });
         console.log(response.data);
+        const userdata = response.data
     } catch (error) {
         console.error(error);
     }
